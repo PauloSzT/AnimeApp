@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">Anime</string>
+    <string name="filters">Filters: </string>
+    <string name="loading_failed">Failed to load</string>
+    <string name="placeholder_result">Placeholder result text</string>
+    <string name="retry">Retry</string>
+    <string name="loading">Loading</string>
+    <string name="no_search_results">No Search Results…</string>
+    <string name="no_favorites_saved">No Favorites Saved</string>
+    <string name="publication_date">"Publication Date: %s</string>
+    <string name="type">"Type: %s</string>
+    <string name="section">"Section: %s</string>
+    <string name="close">CLOSE</string>
+    <string name="type_filters">"Type Filters"</string>
+    <string name="section_filters">"Section Filters"</string>
 </resources>

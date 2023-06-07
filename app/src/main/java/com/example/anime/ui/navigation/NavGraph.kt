@@ -10,6 +10,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.anime.ui.character.CharacterScreen
 import com.example.anime.ui.detail.DetailScreen
 import com.example.anime.ui.favorites.FavoritesScreen
+import com.example.anime.ui.favorites.FavoritesScreenViewModel
 import com.example.anime.ui.search.SearchScreen
 
 @Composable
@@ -26,7 +27,9 @@ fun NavigationGraph(
             DetailScreen(navHostController = navHostController)
         }
         composable(route = NavItem.Favorites.route) {
-            FavoritesScreen(navHostController = navHostController)
+            FavoritesScreen(
+                viewModel = FavoritesScreenViewModel()
+            )
         }
         composable(route = NavItem.Search.route) {
             SearchScreen(navHostController = navHostController)
