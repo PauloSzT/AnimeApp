@@ -12,6 +12,7 @@ import com.example.anime.ui.detail.DetailScreen
 import com.example.anime.ui.favorites.FavoritesScreen
 import com.example.anime.ui.favorites.FavoritesScreenViewModel
 import com.example.anime.ui.search.SearchScreen
+import com.example.anime.ui.search.SearchScreenViewModel
 
 @Composable
 fun NavigationGraph(
@@ -32,7 +33,10 @@ fun NavigationGraph(
             )
         }
         composable(route = NavItem.Search.route) {
-            SearchScreen(navHostController = navHostController)
+            SearchScreen(
+                viewModel = SearchScreenViewModel(),
+                navHostController = navHostController
+            )
         }
         composable(route = NavItem.Character.route) {
             CharacterScreen(navHostController = navHostController)
