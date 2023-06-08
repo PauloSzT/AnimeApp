@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -35,8 +34,6 @@ import com.example.anime.ui.navigation.NavItem
 import com.example.anime.ui.navigation.NavItem.Companion.title
 import com.example.anime.ui.navigation.NavigationGraph
 import com.example.anime.ui.theme.AnimeAppTheme
-import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 
 class MainActivity : ComponentActivity() {

@@ -4,6 +4,13 @@ plugins {
     id("com.google.dagger.hilt.android")
     id("com.google.devtools.ksp")
     id("org.jetbrains.kotlin.plugin.serialization")
+    id ("com.apollographql.apollo3")
+}
+
+apollo {
+    service("service") {
+        packageNamesFromFilePaths()
+    }
 }
 
 android {
@@ -33,6 +40,7 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
+
 }
 
 dependencies {
@@ -53,6 +61,15 @@ dependencies {
     implementation("com.google.dagger:hilt-android:$daggerHiltVersion")
     ksp ("com.google.dagger:hilt-android-compiler:$daggerHiltVersion")
 
+    //ApolloClient
+    implementation("com.apollographql.apollo3:apollo-runtime:3.8.2")
+
+    // Room
+    implementation("androidx.room:room-runtime:2.5.1")
+    implementation("androidx.room:room-ktx:2.5.1")
+
+    //Paging3
+    implementation("androidx.paging:paging-runtime-ktx:3.2.0-alpha06")
 
     implementation(project(":core"))
 }
