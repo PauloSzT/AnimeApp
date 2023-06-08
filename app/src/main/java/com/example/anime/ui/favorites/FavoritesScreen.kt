@@ -28,7 +28,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.anime.R
-import com.example.anime.ui.models.UiAnime
+import com.example.anime.ui.models.UiFavoriteAnime
 import kotlin.math.abs
 
 @Composable
@@ -78,7 +78,7 @@ fun FavoritesScreenContent(
                                 .toFloat()
 
                         },
-                    uiAnime = favoriteList[pageNumber],
+                    uiFavoriteAnime = favoriteList[pageNumber],
                     onCardClick = {
 //                        val id = URLEncoder.encode(favoriteList[pageNumber].id, UTF)
 //                        navigateToDetails(id)
@@ -99,13 +99,13 @@ fun PagerState.calculateCurrentOffsetForPage(page: Int): Float {
 
 @Composable
 fun FavoriteItemComponent(
-    uiAnime: UiAnime,
+    uiFavoriteAnime: UiFavoriteAnime,
     modifier: Modifier,
-    onCardClick: (String) -> Unit
+    onCardClick: (Int) -> Unit
 ) {
     Card(
         modifier = modifier
-            .clickable { onCardClick(uiAnime.id) }
+            .clickable { onCardClick(uiFavoriteAnime.id) }
     ) {
         Column(
             modifier = Modifier

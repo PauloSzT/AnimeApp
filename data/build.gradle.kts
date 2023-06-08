@@ -4,12 +4,13 @@ plugins {
     id("com.google.dagger.hilt.android")
     id("com.google.devtools.ksp")
     id("org.jetbrains.kotlin.plugin.serialization")
-    id ("com.apollographql.apollo3")
+    id ("com.apollographql.apollo3") version "3.8.2"
+    kotlin("kapt")
 }
 
 apollo {
     service("service") {
-        packageNamesFromFilePaths()
+        packageName.set("com.example.anime")
     }
 }
 
@@ -54,12 +55,10 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
-    //ksp
-    ksp ("androidx.room:room-compiler:2.5.1")
-
     //DaggerHilt
     implementation("com.google.dagger:hilt-android:$daggerHiltVersion")
-    ksp ("com.google.dagger:hilt-android-compiler:$daggerHiltVersion")
+    kapt ("com.google.dagger:hilt-android-compiler:$daggerHiltVersion")
+    kapt ("androidx.hilt:hilt-compiler:1.0.0")
 
     //ApolloClient
     implementation("com.apollographql.apollo3:apollo-runtime:3.8.2")
@@ -67,6 +66,7 @@ dependencies {
     // Room
     implementation("androidx.room:room-runtime:2.5.1")
     implementation("androidx.room:room-ktx:2.5.1")
+    ksp ("androidx.room:room-compiler:2.5.1")
 
     //Paging3
     implementation("androidx.paging:paging-runtime-ktx:3.2.0-alpha06")

@@ -34,8 +34,9 @@ import com.example.anime.ui.navigation.NavItem
 import com.example.anime.ui.navigation.NavItem.Companion.title
 import com.example.anime.ui.navigation.NavigationGraph
 import com.example.anime.ui.theme.AnimeAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,4 +1,4 @@
-package com.example.data.repository.remote
+package com.example.data.usecases.remote.getpaginatedanimeusecase
 
 import androidx.paging.PagingData
 import com.example.anime.GetAnimeBySearchQuery
@@ -6,8 +6,8 @@ import com.example.anime.type.MediaSort
 import com.example.anime.type.MediaType
 import kotlinx.coroutines.flow.Flow
 
-interface RemoteRepository {
-    fun getPaginatedAnime(
+interface GetPaginatedAnimeUseCase {
+    operator fun invoke(
         query: String,
         typeFilter: MediaType?,
         mediaSort: List<MediaSort>

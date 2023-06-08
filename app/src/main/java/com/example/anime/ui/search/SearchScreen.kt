@@ -25,13 +25,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemContentType
+import androidx.paging.compose.itemKey
 import com.example.anime.R
 import com.example.anime.ui.navigation.NavItem
+import com.example.anime.ui.utils.mapToSearchUiModel
 
 @Composable
 fun SearchScreen (
-    viewModel: SearchScreenViewModel,
+    viewModel: SearchScreenViewModel = hiltViewModel(),
     navHostController: NavHostController
 ){
     SearchScreenContent(searchUiState = viewModel.searchUiState){item->
@@ -47,6 +52,9 @@ fun SearchScreenContent(
 ) {
     val isLoading by searchUiState.isLoading.collectAsState()
     val searchValue by searchUiState.searchValue.collectAsState()
+    val paginatedAnimeProvider by searchUiState.paginatedAnimeProvider.collectAsState()
+    val paginatedAnimes = paginatedAnimeProvider?.collectAsLazyPagingItems()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -76,12 +84,24 @@ fun SearchScreenContent(
                 LoadingScreen()
             } else{
                 LazyVerticalGrid(columns = GridCells.Fixed(3)){
-//                    SearchItemRow(
-//                        uiAnime = item,
-//                        favoritesIdsState = ,
-//                        onFavoriteClick = {},
-//                        navigateToDetails = {navigateToDetails}
-//                    )
+                    paginatedAnimes?.let{ animeitem ->
+                        items(
+                            count = paginatedAnimes.itemCount,
+                            key = paginatedAnimes.itemKey(),
+                            contentType = paginatedAnimes.itemContentType()
+                        ) { index ->
+                            val item = paginatedAnimes[index]
+                            item?.let { resultanime ->
+                                SearchItemRow(
+                                    uiSearchResultAnime = resultanime.mapToSearchUiModel(),
+                                    favoritesIdsState = emptyList(),
+                                    onFavoriteClick = {},
+                                    navigateToDetails = {}
+                                )
+                            }
+                        }
+                    }
+
                 }
             }
         }

@@ -33,10 +33,7 @@ fun NavigationGraph(
             )
         }
         composable(route = NavItem.Search.route) {
-            SearchScreen(
-                viewModel = SearchScreenViewModel(),
-                navHostController = navHostController
-            )
+            SearchScreen(navHostController = navHostController)
         }
         composable(route = NavItem.Character.route) {
             CharacterScreen(navHostController = navHostController)

@@ -4,6 +4,7 @@ plugins {
     id("com.google.dagger.hilt.android")
     id("com.google.devtools.ksp")
     id("org.jetbrains.kotlin.plugin.serialization")
+    kotlin("kapt")
 }
 
 android {
@@ -80,7 +81,9 @@ dependencies {
 
     //DaggerHilt
     implementation("com.google.dagger:hilt-android:$daggerHiltVersion")
-    ksp ("com.google.dagger:hilt-android-compiler:$daggerHiltVersion")
+    implementation ("androidx.hilt:hilt-navigation-compose:1.0.0")
+    kapt ("com.google.dagger:hilt-android-compiler:$daggerHiltVersion")
+    kapt ("androidx.hilt:hilt-compiler:1.0.0")
 
     //Room
     ksp("androidx.room:room-compiler:2.5.1")

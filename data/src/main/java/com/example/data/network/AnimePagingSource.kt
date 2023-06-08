@@ -1,18 +1,18 @@
 package com.example.data.network
 
-import GetAnimeBySearchQuery
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.Optional
-import type.MediaSort
-import type.MediaType
+import com.example.anime.GetAnimeBySearchQuery
+import com.example.anime.type.MediaSort
+import com.example.anime.type.MediaType
 import java.io.IOException
 
 class AnimePagingSource(
     private val apolloClient: ApolloClient,
     private val query: String,
-    private val typeFilter: MediaType,
+    private val typeFilter: MediaType?,
     private val mediaSort: List<MediaSort>
 ) : PagingSource<Int, GetAnimeBySearchQuery.Medium>() {
 
@@ -31,7 +31,7 @@ class AnimePagingSource(
                     Optional.present(pageNumber),
                     Optional.present(10),
                     Optional.present(query),
-                    Optional.present(typeFilter),
+                    Optional.presentIfNotNull(typeFilter),
                     Optional.present(mediaSort)
                 )
             ).execute().data?.Page
