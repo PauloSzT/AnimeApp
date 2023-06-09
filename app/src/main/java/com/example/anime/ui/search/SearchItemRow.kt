@@ -16,26 +16,27 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.anime.R
-import com.example.anime.ui.models.UiSearchResultAnime
+import com.example.anime.ui.models.UiAnimeListItem
 
 @Composable
 fun SearchItemRow(
-    uiSearchResultAnime: UiSearchResultAnime,
+
+    uiAnimeListItem: UiAnimeListItem,
     favoritesIdsState: List<Int>,
-    onFavoriteClick: (UiSearchResultAnime) -> Unit,
+    onFavoriteClick: (UiAnimeListItem) -> Unit,
     navigateToDetails: (Int) -> Unit
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { },
+            .clickable { navigateToDetails(uiAnimeListItem.id) },
         elevation = CardDefaults.cardElevation(8.dp),
         colors = CardDefaults.cardColors(MaterialTheme.colorScheme.primaryContainer)
     ) {
-        Row() {
+        Row {
             AsyncImage(
                 modifier = Modifier.weight(1f),
-                model = uiSearchResultAnime.coverImage,
+                model = uiAnimeListItem.coverImage,
                 contentDescription = null
             )
             Column(
@@ -45,7 +46,7 @@ fun SearchItemRow(
 
                 ) {
                 Text(
-                    text = uiSearchResultAnime.title,
+                    text = uiAnimeListItem.title,
                     modifier = Modifier
                         .padding(bottom = 8.dp),
                     softWrap = true
@@ -55,9 +56,9 @@ fun SearchItemRow(
                 modifier = Modifier
                     .padding(top = 16.dp, end = 8.dp)
                     .weight(0.5f)
-                    .clickable { onFavoriteClick(uiSearchResultAnime) },
+                    .clickable { onFavoriteClick(uiAnimeListItem) },
                 painter = painterResource(
-                    if (favoritesIdsState.contains(uiSearchResultAnime.id)) R.drawable.ic_start_fill else R.drawable.ic_start_empty
+                    if (favoritesIdsState.contains(uiAnimeListItem.id)) R.drawable.ic_start_fill else R.drawable.ic_start_empty
                 ),
                 contentDescription = null
             )

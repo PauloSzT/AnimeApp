@@ -1,8 +1,8 @@
 package com.example.data.di
 
-import com.example.data.repository.local.LocalRepository
+import com.example.core.repository.local.LocalRepository
 import com.example.data.repository.local.LocalRepositoryImpl
-import com.example.data.repository.remote.RemoteRepository
+import com.example.core.repository.remote.RemoteRepository
 import com.example.data.repository.remote.RemoteRepositoryImpl
 import dagger.Binds
 import dagger.Module

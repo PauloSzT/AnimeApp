@@ -32,15 +32,14 @@ import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.example.anime.R
 import com.example.anime.ui.navigation.NavItem
-import com.example.anime.ui.utils.mapToSearchUiModel
 
 @Composable
-fun SearchScreen (
+fun SearchScreen(
     viewModel: SearchScreenViewModel = hiltViewModel(),
     navHostController: NavHostController
-){
-    SearchScreenContent(searchUiState = viewModel.searchUiState){item->
-        navHostController.navigate(NavItem.Detail.routeWithArgs(item))
+) {
+    SearchScreenContent(searchUiState = viewModel.searchUiState) { id ->
+        navHostController.navigate(NavItem.Detail.routeWithArgs(id))
     }
 }
 
@@ -48,19 +47,20 @@ fun SearchScreen (
 @Composable
 fun SearchScreenContent(
     searchUiState: SearchUiState,
-    navigateToDetails: (String) -> Unit
+    navigateToDetails: (Int) -> Unit
 ) {
     val isLoading by searchUiState.isLoading.collectAsState()
     val searchValue by searchUiState.searchValue.collectAsState()
     val paginatedAnimeProvider by searchUiState.paginatedAnimeProvider.collectAsState()
     val paginatedAnimes = paginatedAnimeProvider?.collectAsLazyPagingItems()
+    val favoriteIds by searchUiState.favoriteIds.collectAsState()
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 16.dp)
     ) {
-        Row{
+        Row {
             TextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = searchValue,
@@ -79,24 +79,24 @@ fun SearchScreenContent(
                 )
             )
         }
-        Box(modifier = Modifier.fillMaxSize()){
-            if(isLoading){
+        Box(modifier = Modifier.fillMaxSize()) {
+            if (isLoading) {
                 LoadingScreen()
-            } else{
-                LazyVerticalGrid(columns = GridCells.Fixed(3)){
-                    paginatedAnimes?.let{ animeitem ->
+            } else {
+                LazyVerticalGrid(columns = GridCells.Fixed(3)) {
+                    paginatedAnimes?.let { animeItem ->
                         items(
-                            count = paginatedAnimes.itemCount,
-                            key = paginatedAnimes.itemKey(),
-                            contentType = paginatedAnimes.itemContentType()
+                            count = animeItem.itemCount,
+                            key = animeItem.itemKey(),
+                            contentType = animeItem.itemContentType()
                         ) { index ->
-                            val item = paginatedAnimes[index]
-                            item?.let { resultanime ->
+                            val item = animeItem[index]
+                            item?.let { resultAnime ->
                                 SearchItemRow(
-                                    uiSearchResultAnime = resultanime.mapToSearchUiModel(),
-                                    favoritesIdsState = emptyList(),
-                                    onFavoriteClick = {},
-                                    navigateToDetails = {}
+                                    uiAnimeListItem = resultAnime,
+                                    favoritesIdsState = favoriteIds,
+                                    onFavoriteClick = searchUiState.onFavoriteClick,
+                                    navigateToDetails = { navigateToDetails(resultAnime.id) }
                                 )
                             }
                         }

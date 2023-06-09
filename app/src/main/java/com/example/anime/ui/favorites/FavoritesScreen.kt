@@ -1,7 +1,6 @@
 package com.example.anime.ui.favorites
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,7 +15,9 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -27,13 +28,15 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
 import com.example.anime.R
 import com.example.anime.ui.models.UiFavoriteAnime
 import kotlin.math.abs
 
 @Composable
 fun FavoritesScreen(
-    viewModel: FavoritesScreenViewModel
+    viewModel: FavoritesScreenViewModel = hiltViewModel()
 ) {
     FavoritesScreenContent(viewModel.favoritesUiState)
 }
@@ -79,10 +82,7 @@ fun FavoritesScreenContent(
 
                         },
                     uiFavoriteAnime = favoriteList[pageNumber],
-                    onCardClick = {
-//                        val id = URLEncoder.encode(favoriteList[pageNumber].id, UTF)
-//                        navigateToDetails(id)
-                    }
+                    onDeleteFavoriteAnimeClick = favoritesUiState.onDeleteFavoriteAnimeClick
                 )
             }
         }
@@ -101,33 +101,24 @@ fun PagerState.calculateCurrentOffsetForPage(page: Int): Float {
 fun FavoriteItemComponent(
     uiFavoriteAnime: UiFavoriteAnime,
     modifier: Modifier,
-    onCardClick: (Int) -> Unit
+    onDeleteFavoriteAnimeClick: (UiFavoriteAnime) -> Unit
 ) {
     Card(
         modifier = modifier
-            .clickable { onCardClick(uiFavoriteAnime.id) }
     ) {
         Column(
             modifier = Modifier
                 .padding(10.dp)
         ) {
-//            Text(
-//                modifier = Modifier.padding(bottom = 4.dp),
-//                text = uiAnime.title,
-//                style = MaterialTheme.typography.bodyMedium
-//            )
-//            AsyncImage(model = uiAnime.photo, contentDescription = null)
-//            Text(
-//                text = stringResource(
-//                    id = R.string.publication_date,
-//                    uiAnime.webPublicationDate
-//                ),
-//                style = MaterialTheme.typography.titleSmall
-//            )
-//            Text(
-//                text = stringResource(id = R.string.section, uiAnime.sectionName),
-//                style = MaterialTheme.typography.titleSmall
-//            )
+            Text(
+                modifier = Modifier.padding(bottom = 4.dp),
+                text = uiFavoriteAnime.title,
+                style = MaterialTheme.typography.bodyMedium
+            )
+            AsyncImage(model = uiFavoriteAnime.coverImage, contentDescription = null)
+            Button(onClick = { onDeleteFavoriteAnimeClick(uiFavoriteAnime) }) {
+                Text(text = "Delete")
+            }
         }
     }
 }
