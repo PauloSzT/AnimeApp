@@ -33,6 +33,7 @@ class SearchScreenViewModel @Inject constructor(
 ) : ViewModel() {
     private val isLoading = MutableStateFlow(false)
     private val searchValue = MutableStateFlow(EMPTY_STRING)
+    private val searchValueExecutor = MutableStateFlow(EMPTY_STRING)
     private val mediaSortFilters = MutableStateFlow(MediaSort.values().mapNotNull { item ->
         if (item.rawValue == "UNKNOWN__") null else UiMediaSortFilter(item.mapToUiModel())
     })
@@ -44,7 +45,7 @@ class SearchScreenViewModel @Inject constructor(
         getAllIdsUseCase().stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
     private val paginatedAnimeProvider = combine(
         mediaSortFilters,
-        searchValue,
+        searchValueExecutor,
         selectedTypeFilter
     ) { sortFilters, query, typeFilter ->
         Pager(
@@ -78,11 +79,11 @@ class SearchScreenViewModel @Inject constructor(
         onQueryChange = ::onQueryChange,
         onFavoriteClick = ::onFavoriteClick,
         onSortFilterClick = ::onSortFilterClick,
-        onTypeFilterClick = ::onTypeFilterClick
+        onTypeFilterClick = ::onTypeFilterClick,
+        onImeActionClick = ::onImeActionClick,
     )
 
     private fun onQueryChange(query: String) {
-        isLoading.value = true
         searchValue.value = if (query.length == 1) query.trim() else query
     }
 
@@ -98,7 +99,8 @@ class SearchScreenViewModel @Inject constructor(
 
     private fun onTypeFilterClick(filter: UiMediaType) {
         isLoading.value = true
-        if (filter.name == selectedTypeFilter.value?.name) selectedTypeFilter.value = null else selectedTypeFilter.value =
+        if (filter.name == selectedTypeFilter.value?.name) selectedTypeFilter.value =
+            null else selectedTypeFilter.value =
             filter
     }
 
@@ -107,5 +109,10 @@ class SearchScreenViewModel @Inject constructor(
         mediaSortFilters.value = mediaSortFilters.value.map { item ->
             if (filter.filter.name == item.filter.name) item.copy(isSelected = !item.isSelected) else item
         }
+    }
+
+    private fun onImeActionClick() {
+        isLoading.value = true
+        searchValueExecutor.value = searchValue.value
     }
 }

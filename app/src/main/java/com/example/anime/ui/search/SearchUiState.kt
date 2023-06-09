@@ -18,5 +18,6 @@ data class SearchUiState(
     val onQueryChange: (String) -> Unit,
     val onFavoriteClick: (UiAnimeListItem) -> Unit,
     val onSortFilterClick: (UiMediaSortFilter) -> Unit,
-    val onTypeFilterClick: (UiMediaType) -> Unit
+    val onTypeFilterClick: (UiMediaType) -> Unit,
+    val onImeActionClick: () -> Unit
 )
