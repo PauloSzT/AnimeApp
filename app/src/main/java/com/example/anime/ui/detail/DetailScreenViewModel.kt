@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.anime.ui.models.UiDetailAnime
+import com.example.anime.ui.utils.UiConstants.ZERO_VALUE
 import com.example.anime.ui.utils.mapToUiModel
 import com.example.core.repository.usecases.remote.getsingleanimebyidusecase.GetSingleAnimeByIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +22,7 @@ class DetailScreenViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             detailItem.value = getSingleAnimeByIdUseCase(
-                savedStateHandle.get<Int>("animeId") ?: 0
+                savedStateHandle.get<Int>("animeId") ?: ZERO_VALUE
             )?.mapToUiModel()
         }
     }

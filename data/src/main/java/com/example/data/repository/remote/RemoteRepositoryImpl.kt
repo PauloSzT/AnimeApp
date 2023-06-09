@@ -1,6 +1,5 @@
 package com.example.data.repository.remote
 
-import android.util.Log
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.Optional
 import com.example.anime.GetAnimeBySearchQuery
@@ -12,6 +11,7 @@ import com.example.core.models.CoreMediaType
 import com.example.core.models.CoreSearchResultAnime
 import com.example.core.models.CoreSortFilter
 import com.example.core.repository.remote.RemoteRepository
+import com.example.data.utils.DataConstants.TEN_VALUE
 import com.example.data.utils.mapToCoreModel
 import com.example.data.utils.mapToRemoteModel
 import javax.inject.Inject
@@ -28,7 +28,7 @@ class RemoteRepositoryImpl @Inject constructor(private val apolloClient: ApolloC
         val response =apolloClient.query(
             GetAnimeBySearchQuery(
                 page = Optional.present(page),
-                perPage = Optional.present(10),
+                perPage = Optional.present(TEN_VALUE),
                 query = Optional.present(query),
                 mediaType = Optional.presentIfNotNull(typeFilter?.mapToRemoteModel()),
                 mediaSort = Optional.present(mediaSort.map { item -> item.mapToRemoteModel() })

@@ -11,10 +11,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
+import com.example.anime.R
 import com.example.anime.ui.models.UiAnimeCharacterDetail
 
 @Composable
@@ -40,12 +42,12 @@ fun CharacterScreenContent(
                     .height(250.dp)
                     .width(250.dp)
             )
-            Text(text = "Full Name: ${character.name}")
-            Text(text = "Description: ${character.description}")
-            Text(text = "Gender: ${character.gender}")
-            Text(text = "Date Of Birth: ${character.dateOfBirth}")
-            Text(text = "Age: ${character.age}")
-            Text(text = "Blood Type: ${character.bloodType}")
+            Text(text = stringResource(id = R.string.full_name, character.name))
+            Text(text = stringResource(id = R.string.description,character.description))
+            Text(text = stringResource(id = R.string.gender, character.gender))
+            Text(text = stringResource(id = R.string.date_of_birth, character.dateOfBirth))
+            Text(text = stringResource(id = R.string.age, character.age))
+            Text(text = stringResource(id = R.string.blood_type, character.bloodType))
         }
     }
 }

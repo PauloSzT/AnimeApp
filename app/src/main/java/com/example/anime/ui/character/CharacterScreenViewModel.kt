@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.anime.ui.models.UiAnimeCharacterDetail
+import com.example.anime.ui.utils.UiConstants.ZERO_VALUE
 import com.example.anime.ui.utils.mapToUiModel
 import com.example.core.repository.usecases.remote.getsinglecharacterbyidusecase.GetSingleCharacterByIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +22,7 @@ class CharacterScreenViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             characterItem.value = getSingleCharacterByIdUseCase(
-                savedStateHandle.get<Int>("characterId") ?: 0
+                savedStateHandle.get<Int>("characterId") ?: ZERO_VALUE
             )?.mapToUiModel()
         }
     }

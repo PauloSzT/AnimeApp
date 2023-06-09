@@ -1,7 +1,6 @@
 package com.example.anime.ui.detail
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,10 +12,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
+import com.example.anime.R
 import com.example.anime.ui.navigation.NavItem
+import com.example.anime.ui.utils.UiConstants.EMPTY_STRING
+import com.example.anime.ui.utils.UiConstants.THREE_VALUE
 
 @Composable
 fun DetailScreen(
@@ -39,25 +42,25 @@ fun DetailScreenContent(
             modifier = Modifier.fillMaxSize()
         ) {
             AsyncImage(model = anime.coverImage, contentDescription = null)
-            Text(text = anime.title)
-            Text(text = anime.episodes.toString())
-            Text(text = anime.score.toString())
+            Text(text = stringResource(id = R.string.title, anime.title))
+            Text(text = stringResource(id = R.string.episodes, anime.episodes))
+            Text(text = stringResource(id = R.string.score, anime.score))
             Row {
                 anime.genres.forEach { genre ->
-                    Text(text = genre ?: "")
+                    Text(text = stringResource(id = R.string.genres, genre ?: EMPTY_STRING))
                 }
             }
-            Text(text = anime.englishName)
-            Text(text = anime.japaneseName)
-            Text(text = anime.description)
-            LazyVerticalGrid(columns = GridCells.Fixed(3)) {
+            Text(text = stringResource(id = R.string.english, anime.englishName ))
+            Text(text = stringResource(id = R.string.japanese, anime.japaneseName))
+            Text(text = stringResource(id = R.string.description, anime.description))
+            LazyVerticalGrid(columns = GridCells.Fixed(THREE_VALUE)) {
                 anime.characters.forEach { character ->
                     item {
                         Card(
                             modifier = Modifier.clickable { navigateToCharacter(character.id) }
                         ) {
                             AsyncImage(model = character.imageUrl, contentDescription = null)
-                            Text(text = character.name)
+                            Text(text = stringResource(id = R.string.character, character.name))
                         }
                     }
                 }

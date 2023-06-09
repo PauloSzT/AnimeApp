@@ -34,6 +34,7 @@ import com.example.anime.ui.navigation.NavItem
 import com.example.anime.ui.navigation.NavItem.Companion.title
 import com.example.anime.ui.navigation.NavigationGraph
 import com.example.anime.ui.theme.AnimeAppTheme
+import com.example.anime.ui.utils.UiConstants.EMPTY_STRING
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -43,7 +44,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val navHostController = rememberNavController()
-            var title by remember { mutableStateOf("") }
+            var title by remember { mutableStateOf(EMPTY_STRING) }
             var displayTopBar by remember { mutableStateOf(true) }
             DisposableEffect(key1 = Unit) {
                 val destinationListener =
@@ -75,7 +76,7 @@ class MainActivity : ComponentActivity() {
                                     }
                                 },
                                 actions = {
-                                    IconButton(onClick = { navHostController.navigate(NavItem.Favorites.route)}) {
+                                    IconButton(onClick = { navHostController.navigate(NavItem.Favorites.route) }) {
                                         Icon(
                                             painter = painterResource(id = R.drawable.ic_favorites),
                                             contentDescription = null

@@ -1,13 +1,13 @@
 package com.example.anime.ui.navigation
 
 import com.example.anime.R
-import com.example.anime.ui.navigation.NavConstants.CHARACTER_SCREEN_TITLE
-import com.example.anime.ui.navigation.NavConstants.DETAIL_SCREEN_TITLE
-import com.example.anime.ui.navigation.NavConstants.FAVORITES_SCREEN_ROUTE
-import com.example.anime.ui.navigation.NavConstants.FAVORITES_SCREEN_TITLE
-import com.example.anime.ui.navigation.NavConstants.SEARCH_SCREEN_ROUTE
-import com.example.anime.ui.navigation.NavConstants.SEARCH_SCREEN_TITLE
+import com.example.anime.ui.utils.UiConstants.CHARACTER_SCREEN_TITLE
+import com.example.anime.ui.utils.UiConstants.DETAIL_SCREEN_TITLE
 import com.example.anime.ui.utils.UiConstants.EMPTY_STRING
+import com.example.anime.ui.utils.UiConstants.FAVORITES_SCREEN_ROUTE
+import com.example.anime.ui.utils.UiConstants.FAVORITES_SCREEN_TITLE
+import com.example.anime.ui.utils.UiConstants.SEARCH_SCREEN_ROUTE
+import com.example.anime.ui.utils.UiConstants.SEARCH_SCREEN_TITLE
 
 
 sealed class NavItem(var title: String, var icon: Int, var route: String) {

@@ -11,6 +11,20 @@
     <string name="type">"Type: %s</string>
     <string name="section">"Section: %s</string>
     <string name="close">CLOSE</string>
-    <string name="type_filters">"Type Filters"</string>
-    <string name="section_filters">"Section Filters"</string>
+    <string name="type_filters">Type Filters</string>
+    <string name="section_filters">Section Filters</string>
+    <string name="delete">Delete</string>
+    <string name="full_name">Full Name: %s</string>
+    <string name="description">Description: %s</string>
+    <string name="gender">Gender: %s</string>
+    <string name="date_of_birth">DateOfBirth: %s</string>
+    <string name="age">Age: %s</string>
+    <string name="blood_type">BloodType: %s</string>
+    <string name="title">Title: %s</string>
+    <string name="episodes">Episodes: %s</string>
+    <string name="score">Score: %s</string>
+    <string name="genres">Genres: %s</string>
+    <string name="english">EnglishName: %s</string>
+    <string name="japanese">JapaneseName: %s</string>
+    <string name="character">Character: %s</string>
 </resources>

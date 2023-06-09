@@ -9,7 +9,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.example.anime.R
 
-
 val NotoSerif = FontFamily(
     Font(R.font.notoserifregular, FontWeight.Normal),
     Font(R.font.notoserifbold, FontWeight.Bold),

@@ -117,7 +117,7 @@ fun FavoriteItemComponent(
             )
             AsyncImage(model = uiFavoriteAnime.coverImage, contentDescription = null)
             Button(onClick = { onDeleteFavoriteAnimeClick(uiFavoriteAnime) }) {
-                Text(text = "Delete")
+                Text(text = stringResource(id = R.string.delete))
             }
         }
     }

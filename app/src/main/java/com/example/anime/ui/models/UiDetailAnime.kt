@@ -1,7 +1,5 @@
 package com.example.anime.ui.models
 
-import com.example.core.models.CoreAnimeCharacter
-
 data class UiDetailAnime(
     val id: Int,
     val coverImage: String,

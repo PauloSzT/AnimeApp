@@ -10,5 +10,4 @@ class GetSingleCharacterByIdUseCaseImpl @Inject constructor(
 ) : GetSingleCharacterByIdUseCase {
     override suspend operator fun invoke(characterId: Int): CoreAnimeCharacterDetail? =
         remoteRepository.getCharacterById(characterId)
-
 }

@@ -32,6 +32,7 @@ import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.example.anime.R
 import com.example.anime.ui.navigation.NavItem
+import com.example.anime.ui.utils.UiConstants.THREE_VALUE
 
 @Composable
 fun SearchScreen(
@@ -83,7 +84,7 @@ fun SearchScreenContent(
             if (isLoading) {
                 LoadingScreen()
             } else {
-                LazyVerticalGrid(columns = GridCells.Fixed(3)) {
+                LazyVerticalGrid(columns = GridCells.Fixed(THREE_VALUE)) {
                     paginatedAnimes?.let { animeItem ->
                         items(
                             count = animeItem.itemCount,

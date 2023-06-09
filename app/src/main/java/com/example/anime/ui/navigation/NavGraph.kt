@@ -12,7 +12,6 @@ import androidx.navigation.navArgument
 import com.example.anime.ui.character.CharacterScreen
 import com.example.anime.ui.detail.DetailScreen
 import com.example.anime.ui.favorites.FavoritesScreen
-import com.example.anime.ui.favorites.FavoritesScreenViewModel
 import com.example.anime.ui.search.SearchScreen
 
 @Composable
