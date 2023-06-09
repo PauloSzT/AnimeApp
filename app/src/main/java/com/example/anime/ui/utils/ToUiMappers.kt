@@ -1,11 +1,13 @@
 package com.example.anime.ui.utils
 
 import com.example.anime.type.MediaSort
+import com.example.anime.type.MediaType
 import com.example.anime.ui.models.UiAnimeCharacter
 import com.example.anime.ui.models.UiAnimeCharacterDetail
 import com.example.anime.ui.models.UiAnimeListItem
 import com.example.anime.ui.models.UiDetailAnime
 import com.example.anime.ui.models.UiFavoriteAnime
+import com.example.anime.ui.models.UiMediaType
 import com.example.anime.ui.models.UiSearchResultAnime
 import com.example.anime.ui.models.UiSortFilter
 import com.example.core.models.CoreAnimeCharacter
@@ -26,6 +28,9 @@ fun CoreAnimeListItem.mapToUiModel(): UiAnimeListItem =
 
 fun MediaSort.mapToUiModel(): UiSortFilter =
     UiSortFilter(name)
+
+fun MediaType.mapToUiModel() : UiMediaType =
+    UiMediaType(name)
 
 fun CoreDetailAnime.mapToUiModel(): UiDetailAnime =
     UiDetailAnime(

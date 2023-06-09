@@ -27,6 +27,7 @@ sealed class NavItem(var title: String, var icon: Int, var route: String) {
                 Detail.route -> Detail.title
                 Search.route -> Search.title
                 Favorites.route -> Favorites.title
+                Character.route -> Character.title
                 else -> EMPTY_STRING
             }
         }

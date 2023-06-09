@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.example.anime.type.MediaSort
+import com.example.anime.type.MediaType
 import com.example.anime.ui.models.UiAnimeListItem
 import com.example.anime.ui.models.UiMediaSortFilter
 import com.example.anime.ui.models.UiMediaType
@@ -32,16 +33,19 @@ class SearchScreenViewModel @Inject constructor(
 ) : ViewModel() {
     private val isLoading = MutableStateFlow(false)
     private val searchValue = MutableStateFlow(EMPTY_STRING)
-    private val mediaSortFilters = MutableStateFlow(MediaSort.values().map { item ->
-        UiMediaSortFilter(item.mapToUiModel())
+    private val mediaSortFilters = MutableStateFlow(MediaSort.values().mapNotNull { item ->
+        if (item.rawValue == "UNKNOWN__") null else UiMediaSortFilter(item.mapToUiModel())
     })
-    private val typeFilters = MutableStateFlow<UiMediaType?>(null)
+    private val typeFilters = MutableStateFlow(MediaType.values().mapNotNull { item ->
+        if (item.rawValue == "UNKNOWN__") null else item.mapToUiModel()
+    })
+    private val selectedTypeFilter = MutableStateFlow<UiMediaType?>(null)
     private val favoriteIds =
         getAllIdsUseCase().stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
     private val paginatedAnimeProvider = combine(
         mediaSortFilters,
         searchValue,
-        typeFilters
+        selectedTypeFilter
     ) { sortFilters, query, typeFilter ->
         Pager(
             initialKey = null,
@@ -51,7 +55,7 @@ class SearchScreenViewModel @Inject constructor(
                 prefetchDistance = 1
             ),
             pagingSourceFactory = {
-                AnimePagingSource { page ->
+                AnimePagingSource({ isLoading.value = false }) { page ->
                     getAnimeListBySearchUseCase(
                         page,
                         query,
@@ -68,14 +72,18 @@ class SearchScreenViewModel @Inject constructor(
         isLoading = isLoading,
         favoriteIds = favoriteIds,
         paginatedAnimeProvider = paginatedAnimeProvider,
+        mediaSortFilters = mediaSortFilters,
+        typeFilters = typeFilters,
+        selectedTypeFilter = selectedTypeFilter,
         onQueryChange = ::onQueryChange,
-        onFavoriteClick = ::onFavoriteClick
+        onFavoriteClick = ::onFavoriteClick,
+        onSortFilterClick = ::onSortFilterClick,
+        onTypeFilterClick = ::onTypeFilterClick
     )
 
     private fun onQueryChange(query: String) {
         isLoading.value = true
         searchValue.value = if (query.length == 1) query.trim() else query
-        isLoading.value = false
     }
 
     private fun onFavoriteClick(item: UiAnimeListItem) {
@@ -85,6 +93,19 @@ class SearchScreenViewModel @Inject constructor(
             } else {
                 insertItemUseCase(item.mapToCoreModel())
             }
+        }
+    }
+
+    private fun onTypeFilterClick(filter: UiMediaType) {
+        isLoading.value = true
+        if (filter.name == selectedTypeFilter.value?.name) selectedTypeFilter.value = null else selectedTypeFilter.value =
+            filter
+    }
+
+    private fun onSortFilterClick(filter: UiMediaSortFilter) {
+        isLoading.value = true
+        mediaSortFilters.value = mediaSortFilters.value.map { item ->
+            if (filter.filter.name == item.filter.name) item.copy(isSelected = !item.isSelected) else item
         }
     }
 }

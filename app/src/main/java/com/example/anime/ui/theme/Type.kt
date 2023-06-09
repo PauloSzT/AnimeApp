@@ -24,7 +24,7 @@ val Typography = Typography(
     titleMedium = TextStyle(
         fontFamily = NotoSerif,
         fontWeight = FontWeight.Bold,
-        fontSize = 20.sp
+        fontSize = 18.sp
     ),
     bodyMedium = TextStyle(
         fontFamily = NotoSerif,

@@ -4,6 +4,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Card
@@ -12,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -41,26 +44,60 @@ fun DetailScreenContent(
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            AsyncImage(model = anime.coverImage, contentDescription = null)
-            Text(text = stringResource(id = R.string.title, anime.title))
-            Text(text = stringResource(id = R.string.episodes, anime.episodes))
-            Text(text = stringResource(id = R.string.score, anime.score))
-            Row {
-                anime.genres.forEach { genre ->
-                    Text(text = stringResource(id = R.string.genres, genre ?: EMPTY_STRING))
+            AsyncImage(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .weight(3.0f),
+                contentScale = ContentScale.FillBounds,
+                model = anime.coverImage,
+                contentDescription = anime.title
+            )
+            LazyColumn(
+                modifier = Modifier.weight(3.5f)
+            ){
+                item {
+                    Text(
+                        modifier = Modifier.weight(0.5f),
+                        text = stringResource(id = R.string.title, anime.title))
+                    Text(
+                        modifier = Modifier.weight(0.5f),
+                        text = stringResource(id = R.string.episodes, anime.episodes))
+                    Text(
+                        modifier = Modifier.weight(0.5f),
+                        text = stringResource(id = R.string.score, anime.score))
+                    Column(modifier = Modifier.weight(0.5f)) {
+                        anime.genres.forEach { genre ->
+                            Text(text = stringResource(id = R.string.genres, genre ?: EMPTY_STRING))
+                        }
+                    }
+                    Text(
+                        modifier = Modifier.weight(0.5f),
+                        text = stringResource(id = R.string.english, anime.englishName))
+                    Text(
+                        modifier = Modifier.weight(0.5f),
+                        text = stringResource(id = R.string.japanese, anime.japaneseName))
+                    Text(
+                        modifier = Modifier.weight(0.5f),
+                        text = stringResource(id = R.string.description, anime.description))
                 }
             }
-            Text(text = stringResource(id = R.string.english, anime.englishName ))
-            Text(text = stringResource(id = R.string.japanese, anime.japaneseName))
-            Text(text = stringResource(id = R.string.description, anime.description))
-            LazyVerticalGrid(columns = GridCells.Fixed(THREE_VALUE)) {
+            LazyVerticalGrid(
+                modifier = Modifier.weight(1.5f),
+                columns = GridCells.Fixed(THREE_VALUE)) {
                 anime.characters.forEach { character ->
                     item {
                         Card(
                             modifier = Modifier.clickable { navigateToCharacter(character.id) }
                         ) {
-                            AsyncImage(model = character.imageUrl, contentDescription = null)
-                            Text(text = stringResource(id = R.string.character, character.name))
+                            Column{
+                                AsyncImage(
+                                    modifier = Modifier.fillMaxSize(),
+                                    model = character.imageUrl,
+                                    contentScale = ContentScale.FillBounds,
+                                    contentDescription = character.name)
+                                Text(
+                                    text = character.name)
+                            }
                         }
                     }
                 }

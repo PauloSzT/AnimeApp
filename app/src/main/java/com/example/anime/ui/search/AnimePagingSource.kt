@@ -8,6 +8,7 @@ import com.example.anime.ui.utils.UiConstants.ONE_VALUE
 import java.io.IOException
 
 class AnimePagingSource(
+    val stopLoadingState: () -> Unit,
     val getRemoteList: suspend (Int) -> UiSearchResultAnime
 ) : PagingSource<Int, UiAnimeListItem>() {
 
@@ -22,6 +23,7 @@ class AnimePagingSource(
         return try {
             val pageNumber = params.key ?: ONE_VALUE
             val response = getRemoteList(pageNumber)
+            stopLoadingState()
             LoadResult.Page(
                 data = response.animeList,
                 null,

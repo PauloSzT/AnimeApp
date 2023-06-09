@@ -11,4 +11,5 @@ object UiConstants {
     const val FAVORITES_SCREEN_TITLE = "Favorites"
     const val FAVORITES_SCREEN_ROUTE = "favorites"
     const val CHARACTER_SCREEN_TITLE = "Character"
+    const val OPEN_FILTERS = "OPEN FILTERS"
 }
