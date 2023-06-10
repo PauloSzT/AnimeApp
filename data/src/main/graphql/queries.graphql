@@ -1,0 +1,65 @@
+query getAnimeBySearch($page: Int, $perPage: Int, $query: String, $mediaType: MediaType, $mediaSort: [MediaSort]) {
+    Page(page: $page, perPage: $perPage){
+        pageInfo{
+            hasNextPage
+        }
+        media(search: $query, type: $mediaType, sort: $mediaSort){
+            id
+            coverImage{
+                medium
+            }
+            title{
+                romaji
+            }
+        }
+    }
+}
+
+query getSingleAnimeById($animeId: Int) {
+    Media(id: $animeId){
+        id
+        episodes
+        averageScore
+        genres
+        coverImage{
+            extraLarge
+        }
+        title{
+            romaji
+            english
+            native
+        }
+        description(asHtml: false)
+        characters(role: MAIN){
+            nodes{
+                id
+                image {
+                    medium
+                }
+                name{
+                    full
+                }
+            }
+        }
+    }
+}
+
+query getSingleCharacterById($characterId: Int) {
+    Character(id: $characterId){
+        name{
+            full
+        }
+        image{
+            large
+        }
+        description(asHtml: false)
+        gender
+        dateOfBirth {
+            year
+            month
+            day
+        }
+        age
+        bloodType
+    }
+}
