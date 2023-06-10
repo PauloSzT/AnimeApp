@@ -17,10 +17,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.anime.R
+import com.example.anime.ui.models.UiAnimeCharacterDetail
+import com.example.anime.ui.theme.AnimeAppTheme
+import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
 fun CharacterScreen(
@@ -60,5 +64,26 @@ fun CharacterScreenContent(
                 }
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CharacterScreenPreview(){
+    val characterUiState = CharacterUiState(
+        characterItem = MutableStateFlow(
+            UiAnimeCharacterDetail(
+                name = "Goku",
+                imageUrl = ("https://staticg.sportskeeda.com/editor/2022/01/410ce-16424556600474-1920.jpg"),
+                description = "A DragonBall Z Character",
+                gender = "Male",
+                dateOfBirth = "10-10-1900",
+                age = "201",
+                bloodType = "Sayan"
+            )
+        )
+    )
+    AnimeAppTheme {
+        CharacterScreenContent(characterUiState = characterUiState)
     }
 }

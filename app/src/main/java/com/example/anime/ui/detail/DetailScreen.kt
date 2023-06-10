@@ -16,13 +16,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.anime.R
+import com.example.anime.ui.models.UiDetailAnime
 import com.example.anime.ui.navigation.NavItem
+import com.example.anime.ui.theme.AnimeAppTheme
 import com.example.anime.ui.utils.UiConstants.EMPTY_STRING
 import com.example.anime.ui.utils.UiConstants.THREE_VALUE
+import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
 fun DetailScreen(
@@ -54,17 +58,20 @@ fun DetailScreenContent(
             )
             LazyColumn(
                 modifier = Modifier.weight(3.5f)
-            ){
+            ) {
                 item {
                     Text(
                         modifier = Modifier.weight(0.5f),
-                        text = stringResource(id = R.string.title, anime.title))
+                        text = stringResource(id = R.string.title, anime.title)
+                    )
                     Text(
                         modifier = Modifier.weight(0.5f),
-                        text = stringResource(id = R.string.episodes, anime.episodes))
+                        text = stringResource(id = R.string.episodes, anime.episodes)
+                    )
                     Text(
                         modifier = Modifier.weight(0.5f),
-                        text = stringResource(id = R.string.score, anime.score))
+                        text = stringResource(id = R.string.score, anime.score)
+                    )
                     Column(modifier = Modifier.weight(0.5f)) {
                         anime.genres.forEach { genre ->
                             Text(text = stringResource(id = R.string.genres, genre ?: EMPTY_STRING))
@@ -72,36 +79,66 @@ fun DetailScreenContent(
                     }
                     Text(
                         modifier = Modifier.weight(0.5f),
-                        text = stringResource(id = R.string.english, anime.englishName))
+                        text = stringResource(id = R.string.english, anime.englishName)
+                    )
                     Text(
                         modifier = Modifier.weight(0.5f),
-                        text = stringResource(id = R.string.japanese, anime.japaneseName))
+                        text = stringResource(id = R.string.japanese, anime.japaneseName)
+                    )
                     Text(
                         modifier = Modifier.weight(0.5f),
-                        text = stringResource(id = R.string.description, anime.description))
+                        text = stringResource(id = R.string.description, anime.description)
+                    )
                 }
             }
             LazyVerticalGrid(
                 modifier = Modifier.weight(1.5f),
-                columns = GridCells.Fixed(THREE_VALUE)) {
+                columns = GridCells.Fixed(THREE_VALUE)
+            ) {
                 anime.characters.forEach { character ->
                     item {
                         Card(
                             modifier = Modifier.clickable { navigateToCharacter(character.id) }
                         ) {
-                            Column{
+                            Column {
                                 AsyncImage(
                                     modifier = Modifier.fillMaxSize(),
                                     model = character.imageUrl,
                                     contentScale = ContentScale.FillBounds,
-                                    contentDescription = character.name)
+                                    contentDescription = character.name
+                                )
                                 Text(
-                                    text = character.name)
+                                    text = character.name
+                                )
                             }
                         }
                     }
                 }
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun DetailScreenPreview() {
+    val detailUiState = DetailUiState(
+        detailItem = MutableStateFlow(
+            UiDetailAnime(
+                id = 1,
+                coverImage = ("app/src/main/res/drawable/preview.jpg"),
+                title = "DragonBall Z",
+                episodes = 2,
+                score = 100,
+                genres = emptyList(),
+                englishName = "DragonBall Z",
+                japaneseName = "DragonBall Z",
+                description = "Anime of DragonBall Z",
+                characters = listOf()
+                )
+        )
+    )
+    AnimeAppTheme {
+        DetailScreenContent(detailUiState = detailUiState, {})
     }
 }

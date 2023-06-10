@@ -1,6 +1,7 @@
 package com.example.anime.ui.favorites
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,15 +30,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.anime.R
 import com.example.anime.ui.models.UiFavoriteAnime
+import com.example.anime.ui.theme.AnimeAppTheme
 import com.example.anime.ui.theme.NotoSerif
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlin.math.abs
 
 @Composable
@@ -122,17 +130,27 @@ fun FavoriteItemComponent(
             Row(
                 modifier = Modifier.padding(10.dp)
             ) {
-                AsyncImage(
-                    modifier = Modifier.weight(1.0f),
-                    contentScale = ContentScale.FillBounds,
-                    model = uiFavoriteAnime.coverImage,
-                    contentDescription = null
-                )
-                Column (
-                    modifier = Modifier.weight(1.0f).fillMaxHeight(),
+                if (LocalInspectionMode.current) {
+                    Image(
+                        painter = painterResource(id = R.drawable.preview),
+                        contentDescription = null,
+                        contentScale = ContentScale.FillHeight
+                    )
+                } else {
+                    AsyncImage(
+                        modifier = Modifier.weight(1.0f),
+                        contentScale = ContentScale.FillBounds,
+                        model = uiFavoriteAnime.coverImage,
+                        contentDescription = null
+                    )
+                }
+                Column(
+                    modifier = Modifier
+                        .weight(1.0f)
+                        .fillMaxHeight(),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.SpaceBetween
-                    ) {
+                ) {
                     Text(
                         modifier = Modifier
                             .padding(start = 8.dp, end = 8.dp, top = 16.dp),
@@ -193,5 +211,25 @@ fun NoFavoritesSaved() {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(text = stringResource(id = R.string.no_favorites_saved))
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun FavoritesScreenPreview() {
+    val favoriteUiState = FavoritesUiState(
+        favoriteList = MutableStateFlow(
+            listOf(
+                UiFavoriteAnime(
+                    id = 1,
+                    title = "Goku",
+                    coverImage = "https://staticg.sportskeeda.com/editor/2022/01/410ce-16424556600474-1920.jpg",
+                )
+            )
+        ),
+        onDeleteFavoriteAnimeClick = {}
+    )
+    AnimeAppTheme {
+        FavoritesScreenContent(favoritesUiState = favoriteUiState)
     }
 }

@@ -18,7 +18,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
@@ -33,10 +32,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -46,8 +48,11 @@ import androidx.paging.compose.itemKey
 import com.example.anime.R
 import com.example.anime.ui.components.FiltersDrawer
 import com.example.anime.ui.navigation.NavItem
+import com.example.anime.ui.theme.AnimeAppTheme
 import com.example.anime.ui.utils.UiConstants.OPEN_FILTERS
 import com.example.anime.ui.utils.UiConstants.THREE_VALUE
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 
 @Composable
@@ -81,7 +86,7 @@ fun SearchScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SearchScreenContent(
     searchUiState: SearchUiState,
@@ -93,6 +98,7 @@ fun SearchScreenContent(
     val paginatedAnimeProvider by searchUiState.paginatedAnimeProvider.collectAsState()
     val paginatedAnimes = paginatedAnimeProvider?.collectAsLazyPagingItems()
     val favoriteIds by searchUiState.favoriteIds.collectAsState()
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     Column(
         modifier = Modifier
@@ -125,14 +131,20 @@ fun SearchScreenContent(
                 },
                 trailingIcon = {
                     Icon(
-                        modifier = Modifier.clickable { searchUiState.onImeActionClick() },
+                        modifier = Modifier.clickable {
+                            searchUiState.onImeActionClick()
+                            keyboardController?.hide()
+                        },
                         painter = painterResource(id = R.drawable.ic_search),
                         contentDescription = null
                     )
                 },
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                keyboardActions = KeyboardActions(onSearch = {searchUiState.onImeActionClick()} ),
+                keyboardActions = KeyboardActions(onSearch = {
+                    searchUiState.onImeActionClick()
+                    keyboardController?.hide()
+                }),
                 colors = TextFieldDefaults.colors(
                     focusedTextColor = MaterialTheme.colorScheme.onPrimaryContainer,
                     focusedContainerColor = MaterialTheme.colorScheme.primaryContainer
@@ -143,14 +155,14 @@ fun SearchScreenContent(
             if (isLoading) {
                 LoadingScreen()
             } else {
-                LazyVerticalGrid(columns = GridCells.Fixed(THREE_VALUE)) {
-                    paginatedAnimes?.let { animeItem ->
+                if (paginatedAnimes != null && paginatedAnimes.itemCount > 0) {
+                    LazyVerticalGrid(columns = GridCells.Fixed(THREE_VALUE)) {
                         items(
-                            count = animeItem.itemCount,
-                            key = animeItem.itemKey(),
-                            contentType = animeItem.itemContentType()
+                            count = paginatedAnimes.itemCount,
+                            key = paginatedAnimes.itemKey(),
+                            contentType = paginatedAnimes.itemContentType()
                         ) { index ->
-                            val item = animeItem[index]
+                            val item = paginatedAnimes[index]
                             item?.let { resultAnime ->
                                 SearchItemCard(
                                     uiAnimeListItem = resultAnime,
@@ -161,7 +173,8 @@ fun SearchScreenContent(
                             }
                         }
                     }
-
+                } else {
+                    NoResult()
                 }
             }
         }
@@ -170,10 +183,14 @@ fun SearchScreenContent(
 
 @Composable
 fun LoadingScreen(modifier: Modifier = Modifier) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = modifier.fillMaxSize()
-    ) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(48.dp),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    )
+    {
         Image(
             modifier = Modifier.size(200.dp),
             painter = painterResource(R.drawable.loading_img),
@@ -184,13 +201,32 @@ fun LoadingScreen(modifier: Modifier = Modifier) {
 
 @Composable
 fun NoResult() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(48.dp),
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier.fillMaxSize()
     ) {
         Text(text = stringResource(id = R.string.no_search_results))
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun SearchScreenContentPreview() {
+    val searchUiState = SearchUiState(
+        isLoading = MutableStateFlow(false),
+        searchValue = MutableStateFlow(""),
+        favoriteIds = MutableStateFlow(listOf(1)),
+        paginatedAnimeProvider = (MutableStateFlow(flowOf())),
+        mediaSortFilters = MutableStateFlow(emptyList()),
+        typeFilters = MutableStateFlow(emptyList()),
+        selectedTypeFilter = MutableStateFlow(null),
+        onQueryChange = {},
+        onFavoriteClick = {},
+        onSortFilterClick = {},
+        onTypeFilterClick = {},
+        onImeActionClick = {}
+    )
+    AnimeAppTheme {
+        SearchScreenContent(searchUiState = searchUiState, {}, {})
     }
 }
