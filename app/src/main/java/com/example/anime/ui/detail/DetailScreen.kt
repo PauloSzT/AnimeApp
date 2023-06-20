@@ -1,10 +1,9 @@
 package com.example.anime.ui.detail
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -20,7 +19,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
+import coil.compose.rememberImagePainter
 import com.example.anime.R
+import com.example.anime.ui.models.UiAnimeCharacter
 import com.example.anime.ui.models.UiDetailAnime
 import com.example.anime.ui.navigation.NavItem
 import com.example.anime.ui.theme.AnimeAppTheme
@@ -126,7 +127,7 @@ fun DetailScreenPreview() {
         detailItem = MutableStateFlow(
             UiDetailAnime(
                 id = 1,
-                coverImage = ("app/src/main/res/drawable/preview.jpg"),
+                coverImage = "",
                 title = "DragonBall Z",
                 episodes = 2,
                 score = 100,
@@ -134,8 +135,14 @@ fun DetailScreenPreview() {
                 englishName = "DragonBall Z",
                 japaneseName = "DragonBall Z",
                 description = "Anime of DragonBall Z",
-                characters = listOf()
+                characters = listOf(
+                    UiAnimeCharacter(
+                        id = 1,
+                        imageUrl = "",
+                        name = "Goku"
+                    )
                 )
+            )
         )
     )
     AnimeAppTheme {
