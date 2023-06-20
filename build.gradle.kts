@@ -8,4 +8,3 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization") version "1.8.10" apply false
     id("com.apollographql.apollo3") version "3.8.2" apply false
 }
-
