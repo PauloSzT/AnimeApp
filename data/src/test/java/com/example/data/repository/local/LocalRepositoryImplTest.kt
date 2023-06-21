@@ -47,6 +47,7 @@ class LocalRepositoryImplTest {
     fun setupTest() {
         val internalMockedAnimeFavoriteEntityList = mockedAnimeFavoriteEntityList.toMutableList()
         localRepositoryImpl = LocalRepositoryImpl(fakeFavoriteAnimeDao)
+
         every { fakeFavoriteAnimeDao.getAllFavorites() } returns flowOf(
             internalMockedAnimeFavoriteEntityList
         )
