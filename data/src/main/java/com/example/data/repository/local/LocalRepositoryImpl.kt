@@ -21,10 +21,10 @@ class LocalRepositoryImpl @Inject constructor(
     }
 
     override suspend fun insertItem(item: CoreFavoriteAnime) {
-        return favoriteAnimeDao.insertItem(item.mapToDataBaseModel())
+        favoriteAnimeDao.insertItem(item.mapToDataBaseModel())
     }
 
     override suspend fun deleteItem(item: CoreFavoriteAnime) {
-        return favoriteAnimeDao.deleteItem(item.mapToDataBaseModel())
+        favoriteAnimeDao.deleteItem(item.mapToDataBaseModel())
     }
 }
