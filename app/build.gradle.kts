@@ -61,8 +61,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
 
     // Compose
-    androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     implementation("androidx.compose.ui:ui")
@@ -95,10 +94,13 @@ dependencies {
     testImplementation("com.google.truth:truth:1.1.3")
     testImplementation("com.squareup.okhttp3:mockwebserver:4.9.1")
     testImplementation("io.mockk:mockk:1.10.5")
+    testImplementation("app.cash.turbine:turbine:0.7.0")
     debugImplementation("androidx.compose.ui:ui-test-manifest:1.4.3")
 
 
     // Instrumentation test
+    androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     androidTestImplementation("com.google.dagger:hilt-android-testing:2.3.7")
     kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.44")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
@@ -112,6 +114,8 @@ dependencies {
     androidTestImplementation("androidx.test:core-ktx:1.5.0")
     androidTestImplementation("com.squareup.okhttp3:mockwebserver:4.9.1")
     androidTestImplementation("io.mockk:mockk:1.10.5")
+    androidTestImplementation ("io.mockk:mockk-android:1.10.5")
+
 
     implementation(project(":core"))
     implementation(project(":data"))

@@ -90,6 +90,7 @@ dependencies {
     androidTestImplementation("androidx.test:core-ktx:1.5.0")
     androidTestImplementation("com.squareup.okhttp3:mockwebserver:4.9.1")
     androidTestImplementation("io.mockk:mockk:1.10.5")
+    androidTestImplementation ("io.mockk:mockk-android:1.10.5")
 
     implementation(project(":core"))
 }
