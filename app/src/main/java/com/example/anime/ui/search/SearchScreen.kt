@@ -35,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -49,6 +50,9 @@ import com.example.anime.R
 import com.example.anime.ui.components.FiltersDrawer
 import com.example.anime.ui.navigation.NavItem
 import com.example.anime.ui.theme.AnimeAppTheme
+import com.example.anime.ui.utils.TestConstants.NO_RESULTS_TEXT
+import com.example.anime.ui.utils.TestConstants.RESULTS_LAZY_VERTICAL_GRID
+import com.example.anime.ui.utils.TestConstants.SEARCH_TEXT_FIELD
 import com.example.anime.ui.utils.UiConstants.OPEN_FILTERS
 import com.example.anime.ui.utils.UiConstants.THREE_VALUE
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -139,7 +143,7 @@ fun SearchScreenContent(
                         contentDescription = null
                     )
                 },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().testTag(SEARCH_TEXT_FIELD),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                 keyboardActions = KeyboardActions(onSearch = {
                     searchUiState.onImeActionClick()
@@ -156,7 +160,9 @@ fun SearchScreenContent(
                 LoadingScreen()
             } else {
                 if (paginatedAnimes != null && paginatedAnimes.itemCount > 0) {
-                    LazyVerticalGrid(columns = GridCells.Fixed(THREE_VALUE)) {
+                    LazyVerticalGrid(
+                        modifier = Modifier.testTag(RESULTS_LAZY_VERTICAL_GRID),
+                        columns = GridCells.Fixed(THREE_VALUE)) {
                         items(
                             count = paginatedAnimes.itemCount,
                             key = paginatedAnimes.itemKey(),
@@ -203,7 +209,7 @@ fun LoadingScreen(modifier: Modifier = Modifier) {
 fun NoResult() {
     Box(
         contentAlignment = Alignment.Center,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize().testTag(NO_RESULTS_TEXT)
     ) {
         Text(text = stringResource(id = R.string.no_search_results))
     }

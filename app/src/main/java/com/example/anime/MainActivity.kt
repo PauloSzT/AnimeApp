@@ -26,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -34,6 +35,7 @@ import com.example.anime.ui.navigation.NavItem
 import com.example.anime.ui.navigation.NavItem.Companion.title
 import com.example.anime.ui.navigation.NavigationGraph
 import com.example.anime.ui.theme.AnimeAppTheme
+import com.example.anime.ui.utils.TestConstants.NAVIGATE_TO_FAVORITE_BTN
 import com.example.anime.ui.utils.UiConstants.EMPTY_STRING
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -78,6 +80,7 @@ class MainActivity : ComponentActivity() {
                                 actions = {
                                     IconButton(onClick = { navHostController.navigate(NavItem.Favorites.route) }) {
                                         Icon(
+                                            modifier = Modifier.testTag(NAVIGATE_TO_FAVORITE_BTN),
                                             painter = painterResource(id = R.drawable.ic_favorites),
                                             contentDescription = null
                                         )

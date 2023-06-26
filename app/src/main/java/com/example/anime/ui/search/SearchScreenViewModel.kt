@@ -1,9 +1,11 @@
 package com.example.anime.ui.search
 
+import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import com.example.anime.App
 import com.example.anime.type.MediaSort
 import com.example.anime.type.MediaType
 import com.example.anime.ui.models.UiAnimeListItem
@@ -29,7 +31,8 @@ class SearchScreenViewModel @Inject constructor(
     getAnimeListBySearchUseCase: GetAnimeListBySearchUseCase,
     getAllIdsUseCase: GetAllIdsUseCase,
     private val deleteItemUseCase: DeleteItemUseCase,
-    private val insertItemUseCase: InsertItemUseCase
+    private val insertItemUseCase: InsertItemUseCase,
+    private val app: Application
 ) : ViewModel() {
     private val isLoading = MutableStateFlow(false)
     private val searchValue = MutableStateFlow(EMPTY_STRING)
@@ -56,7 +59,10 @@ class SearchScreenViewModel @Inject constructor(
                 prefetchDistance = 1
             ),
             pagingSourceFactory = {
-                AnimePagingSource({ isLoading.value = false }) { page ->
+                AnimePagingSource({
+                    isLoading.value = false
+                    (app as App).stopFetcher()
+                }) { page ->
                     getAnimeListBySearchUseCase(
                         page,
                         query,
@@ -112,6 +118,7 @@ class SearchScreenViewModel @Inject constructor(
     }
 
     private fun onImeActionClick() {
+        (app as App).startFetcher()
         isLoading.value = true
         searchValueExecutor.value = searchValue.value
     }
