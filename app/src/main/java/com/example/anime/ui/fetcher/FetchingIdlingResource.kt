@@ -31,6 +31,5 @@ class FetchingIdlingResource : IdlingResource, FetcherListener {
 interface FetcherListener {
     fun startFetching()
     fun stopFetching()
-
     fun isIdle(): Boolean
 }

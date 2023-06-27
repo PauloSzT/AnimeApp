@@ -35,6 +35,7 @@ import com.example.anime.ui.navigation.NavItem
 import com.example.anime.ui.navigation.NavItem.Companion.title
 import com.example.anime.ui.navigation.NavigationGraph
 import com.example.anime.ui.theme.AnimeAppTheme
+import com.example.anime.ui.utils.TestConstants.BACK_BTN
 import com.example.anime.ui.utils.TestConstants.NAVIGATE_TO_FAVORITE_BTN
 import com.example.anime.ui.utils.UiConstants.EMPTY_STRING
 import dagger.hilt.android.AndroidEntryPoint
@@ -72,7 +73,9 @@ class MainActivity : ComponentActivity() {
                                 },
                                 navigationIcon = {
                                     if (displayTopBar) {
-                                        IconButton(onClick = { navHostController.navigateUp() }) {
+                                        IconButton(
+                                            modifier = Modifier.testTag(BACK_BTN),
+                                            onClick = { navHostController.navigateUp() }) {
                                             Icon(Icons.Filled.ArrowBack, null)
                                         }
                                     }

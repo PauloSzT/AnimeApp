@@ -6,4 +6,5 @@ object TestConstants {
     const val NO_RESULTS_TEXT = "noResultsText"
     const val RESULTS_LAZY_VERTICAL_GRID = "resultsVerticalGrid"
     const val ITEM_FAVORITE_BTN = "itemFavoriteBtn"
+    const val BACK_BTN = "backArrowBtn"
 }

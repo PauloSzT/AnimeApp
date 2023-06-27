@@ -12,14 +12,16 @@ import androidx.compose.ui.test.performTextInput
 import androidx.test.espresso.IdlingPolicies
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.uiautomator.UiDevice
 import com.example.anime.App
 import com.example.anime.MainActivity
 import com.example.anime.ui.fetcher.FetchingIdlingResource
 import com.example.anime.ui.utils.TestConstants
-import com.example.anime.ui.utils.TestConstants.FAVORITE_BTN_DELETE
+import com.example.anime.ui.utils.TestConstants.BACK_BTN
 import com.example.anime.ui.utils.TestConstants.ITEM_FAVORITE_BTN
+import com.example.anime.ui.utils.TestConstants.NAVIGATE_TO_FAVORITE_BTN
+import com.example.anime.ui.utils.TestConstants.NO_RESULTS_TEXT
+import com.example.anime.ui.utils.TestConstants.RESULTS_LAZY_VERTICAL_GRID
+import com.example.anime.ui.utils.TestConstants.SEARCH_TEXT_FIELD
 import com.example.anime.ui.utils.UiConstants
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
@@ -31,12 +33,11 @@ import org.junit.runner.RunWith
 import java.util.concurrent.TimeUnit
 
 @RunWith(AndroidJUnit4::class)
-class SearchScreenKtTest {
+class SearchAndFavoritesScreenKtTest {
 
     @get:Rule
     val composeTestRule = createAndroidComposeRule<MainActivity>()
-    val fetchingIdlingResource = FetchingIdlingResource()
-    val mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+    private val fetchingIdlingResource = FetchingIdlingResource()
 
     @Before
     fun setUp() {
@@ -58,7 +59,7 @@ class SearchScreenKtTest {
     @Test
     fun viewContainsAHeaderWithABtnToNavigateToFavorites() {
         composeTestRule.onNodeWithTag(
-            TestConstants.NAVIGATE_TO_FAVORITE_BTN,
+            NAVIGATE_TO_FAVORITE_BTN,
             useUnmergedTree = true
         ).apply {
             assertExists()
@@ -76,7 +77,7 @@ class SearchScreenKtTest {
 
     @Test
     fun viewContainsATextFieldToSearchAQuery() {
-        composeTestRule.onNodeWithTag(TestConstants.SEARCH_TEXT_FIELD, useUnmergedTree = true)
+        composeTestRule.onNodeWithTag(SEARCH_TEXT_FIELD, useUnmergedTree = true)
             .apply {
                 assertExists()
                 assertIsDisplayed()
@@ -85,7 +86,7 @@ class SearchScreenKtTest {
 
     @Test
     fun viewContainsANoResultText() {
-        composeTestRule.onNodeWithTag(TestConstants.NO_RESULTS_TEXT, useUnmergedTree = true)
+        composeTestRule.onNodeWithTag(NO_RESULTS_TEXT, useUnmergedTree = true)
             .apply {
                 assertExists()
                 assertIsDisplayed()
@@ -112,7 +113,7 @@ class SearchScreenKtTest {
     @Test
     fun whenUserTypesAQueryAndClicksOnSearchIconASearchIsInitiatedAndResultsAreShown() =
         runTest {
-            composeTestRule.onNodeWithTag(TestConstants.SEARCH_TEXT_FIELD, useUnmergedTree = true)
+            composeTestRule.onNodeWithTag(SEARCH_TEXT_FIELD, useUnmergedTree = true)
                 .apply {
                     performClick()
                     delay(1000)
@@ -120,7 +121,7 @@ class SearchScreenKtTest {
                     performImeAction()
                 }
             composeTestRule.onNodeWithTag(
-                TestConstants.RESULTS_LAZY_VERTICAL_GRID,
+                RESULTS_LAZY_VERTICAL_GRID,
                 useUnmergedTree = true
             ).apply {
                 assertExists()
@@ -131,41 +132,57 @@ class SearchScreenKtTest {
     @Test
     fun whenUserAddsAFavoriteAnimeAppSavesItInCacheAndDisplaysOnFavoriteScreen() =
         runTest {
-            composeTestRule.onNodeWithTag(TestConstants.SEARCH_TEXT_FIELD, useUnmergedTree = true)
+            composeTestRule.onNodeWithTag(SEARCH_TEXT_FIELD, useUnmergedTree = true)
                 .apply {
                     performClick()
                     delay(1000)
                     performTextInput("Dragon Ball")
                     performImeAction()
                 }
-            val itemFavoriteBtns =
+            val itemFavoriteBtn =
                 composeTestRule.onAllNodesWithTag(ITEM_FAVORITE_BTN, useUnmergedTree = true)
-            itemFavoriteBtns[3].performClick()
+            itemFavoriteBtn[3].performClick()
             composeTestRule.onNodeWithTag(
                 TestConstants.NAVIGATE_TO_FAVORITE_BTN,
                 useUnmergedTree = true
             ).performClick()
             composeTestRule.onNodeWithText("Gatarou-sensei Arigatou Itsumo Omoshiroi Manga")
             composeTestRule.onNodeWithText("Delete").performClick()
+            composeTestRule.onNodeWithText("No Favorites Saved").apply {
+                assertExists()
+                assertIsDisplayed()
+            }
         }
 
-    private fun dragScreenRight(){
-        mDevice.drag(
-            mDevice.displayWidth.times(0.8).toInt(),
-            mDevice.displayHeight.times(0.5).toInt(),
-            mDevice.displayWidth.times(0.2).toInt(),
-            mDevice.displayHeight.times(0.5).toInt(),
-            500
-        )
-    }
+    @Test
+    fun whenUserClicksOnBackArrowBtnNavigateBackToSearchScreen() =
+        runTest {
+            navigateToFavorites()
+            composeTestRule.onNodeWithTag(BACK_BTN, useUnmergedTree = true).apply {
+                assertExists()
+                assertIsDisplayed()
+                performClick()
+            }
+            composeTestRule.onNodeWithTag(NO_RESULTS_TEXT, useUnmergedTree = true)
+                .apply {
+                    assertExists()
+                    assertIsDisplayed()
+                }
+        }
 
-    private fun dragonScreenLeft(){
-        mDevice.drag(
-            mDevice.displayWidth.times(0.2).toInt(),
-            mDevice.displayHeight.times(0.5).toInt(),
-            mDevice.displayWidth.times(0.8).toInt(),
-            mDevice.displayHeight.times(0.5).toInt(),
-            500
-        )
+    private suspend fun navigateToFavorites() {
+        composeTestRule.onNodeWithTag(SEARCH_TEXT_FIELD, useUnmergedTree = true)
+            .apply {
+                performClick()
+                delay(1000)
+                performTextInput("Dragon Ball")
+                performImeAction()
+            }
+        val itemFavoriteBtn =
+            composeTestRule.onAllNodesWithTag(ITEM_FAVORITE_BTN, useUnmergedTree = true)
+        itemFavoriteBtn[3].performClick()
+        composeTestRule.onNodeWithTag(
+            NAVIGATE_TO_FAVORITE_BTN, useUnmergedTree = true
+        ).performClick()
     }
 }
