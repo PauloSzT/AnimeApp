@@ -35,8 +35,8 @@ class SearchScreenViewModel @Inject constructor(
     private val app: Application
 ) : ViewModel() {
     private val isLoading = MutableStateFlow(false)
-    private val searchValue = MutableStateFlow(EMPTY_STRING)
-    private val searchValueExecutor = MutableStateFlow(EMPTY_STRING)
+    private var searchValue = MutableStateFlow(EMPTY_STRING)
+    var searchValueExecutor = MutableStateFlow(EMPTY_STRING)
     private val mediaSortFilters = MutableStateFlow(MediaSort.values().mapNotNull { item ->
         if (item.rawValue == "UNKNOWN__") null else UiMediaSortFilter(item.mapToUiModel())
     })

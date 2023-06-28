@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 data class SearchUiState(
-    val searchValue: StateFlow<String>,
+    var searchValue: StateFlow<String>,
     val isLoading: StateFlow<Boolean>,
     val favoriteIds: StateFlow<List<Int>>,
     val paginatedAnimeProvider: StateFlow<Flow<PagingData<UiAnimeListItem>>?>,

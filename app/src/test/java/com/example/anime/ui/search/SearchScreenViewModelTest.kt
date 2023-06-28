@@ -1,6 +1,6 @@
 package com.example.anime.ui.search
 
-import android.app.Application
+import com.example.anime.App
 import com.example.anime.type.MediaSort
 import com.example.anime.type.MediaType
 import com.example.anime.ui.models.UiAnimeListItem
@@ -17,6 +17,7 @@ import com.example.core.repository.usecases.local.deleteitemusecase.DeleteItemUs
 import com.example.core.repository.usecases.local.getallidsusecase.GetAllIdsUseCase
 import com.example.core.repository.usecases.local.insertitemusecase.InsertItemUseCase
 import com.example.core.repository.usecases.remote.getanimelistbysearchusecase.GetAnimeListBySearchUseCase
+import com.google.common.truth.Truth.assertThat
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -45,6 +46,7 @@ class SearchScreenViewModelTest {
     private val getAllIdsUseCase: GetAllIdsUseCase = mockk()
     private val deleteItemUseCase: DeleteItemUseCase = mockk()
     private val insertItemUseCase: InsertItemUseCase = mockk()
+    private val app: App = mockk()
 
     private val mockedCoreSearchResultAnime = CoreSearchResultAnime(
         hasNextPage = true,
@@ -67,7 +69,6 @@ class SearchScreenViewModelTest {
         )
     )
 
-
     private val mockedIdList = listOf(1, 2, 3, 4, 5)
     private val mockedUiMediaSortFilter = CoreSortFilter(
         name = "TestingSortFilterName"
@@ -75,25 +76,6 @@ class SearchScreenViewModelTest {
     private val mockedCoreSortFilters = listOf(mockedUiMediaSortFilter)
     private val mockedSearchValueExecutor = "TestingSearchValueExecutor"
     private val mockedCoreMediaType = CoreMediaType(name = "Anime")
-    private val mockedUiAnimeListItems = flowOf(
-        listOf(
-            UiAnimeListItem(
-                id = 1,
-                title = "TestTitle1",
-                coverImage = "TestCoverImage1"
-            ),
-            UiAnimeListItem(
-                id = 2,
-                title = "TestTitle2",
-                coverImage = "TestCoverImage2"
-            ),
-            UiAnimeListItem(
-                id = 3,
-                title = "TestTitle3",
-                coverImage = "TestCoverImage3"
-            )
-        )
-    )
 
     private val testDispatcher = UnconfinedTestDispatcher()
 
@@ -118,13 +100,12 @@ class SearchScreenViewModelTest {
         coEvery { deleteItemUseCase(any()) } just Runs
         coEvery { insertItemUseCase(any()) } just Runs
 
-
         viewModel = SearchScreenViewModel(
             getAnimeListBySearchUseCase,
             getAllIdsUseCase,
             deleteItemUseCase,
             insertItemUseCase,
-            app = Application()
+            app
         )
         uiState = viewModel.searchUiState
     }
@@ -292,7 +273,7 @@ class SearchScreenViewModelTest {
         }
 
     @Test
-    fun `If user taps on a selected sortfilter, filter is unselected in the list`() =
+    fun `If user taps on a selected SortFilter, filter is unselected in the list`() =
         runBlocking {
             val collectJob = launch(testDispatcher) {
                 viewModel.searchUiState.mediaSortFilters.collect()
@@ -323,41 +304,39 @@ class SearchScreenViewModelTest {
             collectJob.cancel()
         }
 
-//    @OptIn(ExperimentalCoroutinesApi::class)
-//    @Test
-//    fun `paginatedAnimeProvider is working`() =
-//        runTest {
-//            val collectJob = launch(testDispatcher){
-//                viewModel.searchUiState.paginatedAnimeProvider.collect()
-//            }
-//            val mockedSortFilter = flowOf(mockedCoreSortFilters)
-//            val mockedQuery = flowOf(mockedSearchValueExecutor)
-//            val mockedTypeFilter = flowOf(mockedCoreMediaType)
-//            val combinations = combine(
-//                    mockedSortFilter,
-//                    mockedQuery,
-//                    mockedTypeFilter
-//                ) { sort, query, typeFilter ->
-//                    Pager(
-//                        initialKey = null,
-//                        config = PagingConfig(
-//                            pageSize = 50,
-//                            enablePlaceholders = false,
-//                            prefetchDistance = 1
-//                        ),
-//                        pagingSourceFactory = {
-//                            AnimePagingSource({ false }) { page ->
-//                                getAnimeListBySearchUseCase(
-//                                    page,
-//                                    query,
-//                                    typeFilter,
-//                                    sort
-//                                ).mapToUiModel()
-//                            }
-//                        }
-//                    )
-//            }
-//            assertEquals(mockedCoreSearchResultAnime, combinations )
-//            collectJob.cancel()
-//        }
+    @Test
+    fun `When onImeActionClick is called, sets IsLoading to true`() {
+        viewModel.searchUiState.onImeActionClick()
+        assertEquals(true, viewModel.searchUiState.isLoading.value)
+    }
+
+    @Test
+    fun `When onImeActionClick is called, sets SearchValueExecutor to SearchValue`() =
+        runTest {
+            val collectJob = launch(testDispatcher) {
+                viewModel.searchUiState.searchValue.collect()
+            }
+            viewModel.searchUiState.onQueryChange("TestQuery1")
+            val newQuery = viewModel.searchUiState.searchValue.first()
+            viewModel.searchUiState.onImeActionClick()
+            assertThat(viewModel.searchValueExecutor.value).isEqualTo(newQuery)
+            collectJob.cancel()
+        }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `paginatedAnimeProvider is working`() =
+        runTest {
+            val collectJob = launch(testDispatcher) {
+                viewModel.searchUiState.paginatedAnimeProvider.collect()
+            }
+            val mockedSortFilter = mockedCoreSortFilters
+            val mockedQuery = mockedSearchValueExecutor
+            val mockedTypeFilter = mockedCoreMediaType
+            assertEquals(
+                mockedCoreSearchResultAnime,
+                getAnimeListBySearchUseCase(1, mockedQuery, mockedTypeFilter, mockedSortFilter)
+            )
+            collectJob.cancel()
+        }
 }
